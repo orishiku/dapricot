@@ -1,0 +1,53 @@
+{% load static %}
+<article class="title">
+	<h1>{{ post.title }}</h1>
+	<h4>{{ post.publication_date.date }}</h4>
+</article>
+<article class="post">
+	<section>
+	{{ post.content | safe }}
+	</section>
+	<aside class="author">
+		{% if post.author.avatar %}
+		<img src="{{ post.author.avatar }}" alt="author_avatar"/>
+		{% else %}
+		<img src="{% static 'img/avatar-default.png' %}" alt="author_avatar"/>
+		{% endif %}
+		<div>By {{ post.author.get_full_name }}</div>
+	</aside> 
+	<aside>
+		<b>Category:</b><a href="{%url 'dapricot_blog:filter_posts' filter_name='category' value=post.category.slug %}" class="category">{{ post.category }}</a>
+		<hr />
+		<b>Tags:</b>		
+		{% for tag in post.tags.all %}
+			<a href="{%url 'dapricot_blog:filter_posts' filter_name='tag' value=tag.slug %}" class="tag">{{ tag }}</a>
+		{% endfor %}
+	</aside>
+	<aside>{% include 'blog/fragments/share_links.html'%}</aside>
+</article>
+{% if post.enable_comments %}
+<article class="title">
+	<h2>Comentarios:</h2>
+	<h4>Tu correo es necesario para evitar spam, este jamás se mostrará a terceros.</h4>
+	<h4>Se enviará correo únicamente para validar que eres dueño del mismo.</h4>
+	<h4>Los comentarios aparecerán en la página en cuanto sean aprobados por el administrador</h4>
+</article>
+<article class="comments">
+	<aside>
+		<form method="post" >
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button type="submit" class="button">Enviar comentario</button>
+		</form>
+	</aside>
+	<section>
+	{% for comment in comments %}
+		{% if comment.status == 'a' %}
+		<p><b>{{ comment.author.nickname }}</b> | <i>el {{ comment.creation_date|date:"SHORT_DATE_FORMAT" }} a las {{ comment.creation_date|time:"H:i" }}</i>
+		<p>{{ comment.content }}</p>
+		<hr/>
+		{% endif %}
+	{% endfor %}
+	</section>
+</article>
+{% endif %}

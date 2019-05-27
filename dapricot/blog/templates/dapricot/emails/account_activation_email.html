@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hola {{ user }},
+
+Gracias por tomarte el tiempo de pasar por el blog.
+
+Usa el link que se encuentra abajo para validar que eres el dueño de este correo.
+
+Si tu no te registrate en nuestro sitio por favor solo ignora este mensaje.
+
+https://{{ domain }}{% url 'dapricot_blog:activate' uidb64=uid token=token %}
+
+{% endautoescape %}
