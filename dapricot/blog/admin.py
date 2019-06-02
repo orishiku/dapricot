@@ -10,7 +10,8 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'author','status', 'last_edition_date']
     readonly_fields = ['slug','creation_date', 'last_edition_date', 'publication_date']
     ordering = ('-creation_date',)
-        
+    raw_id_fields = ('banner',)
+    
     def save_model(self, request, obj, form, change):
         old_obj = Post.objects.filter(pk=obj.pk)
         
