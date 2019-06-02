@@ -3,11 +3,11 @@ from django.apps import AppConfig
 class SimpleDapricotConfig(AppConfig):
     """Simple AppConfig which does not do automatic discovery."""
 
-    name = 'dapricot.core'
-    label = 'dacore'
-    verbose_name = "Django Apricot Core Module"
+    name = 'dapricot.media'
+    label = 'damedia'
+    verbose_name = "Django Apricot Media Module"
 
-class DapricotCoreConfig(SimpleDapricotConfig):
+class DapricotMediaConfig(SimpleDapricotConfig):
     """The default AppConfig for admin which does autodiscovery."""
 
     def ready(self):

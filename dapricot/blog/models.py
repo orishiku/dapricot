@@ -21,26 +21,28 @@ STATUS_COMMENTER_OPTIONS = (
     ('u', 'Under verification'),)
 
 class Post(models.Model):
-    title = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=100, blank=True)
+    title   = models.CharField(max_length=100)
+    slug    = models.SlugField(max_length=100, blank=True)
     content = models.TextField()
-    
+    banner  = models.ForeignKey('damedia.Picture', 
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                blank=True)
+
+    tags     = models.ManyToManyField('Tag')
+    status   = models.CharField(choices=ENTRY_STATUS_OPTIONS, max_length=1)
     category = models.ForeignKey('Category', 
-                                        on_delete=models.SET_NULL, 
-                                        null=True)
-    tags   = models.ManyToManyField('Tag')
-    status = models.CharField(choices=ENTRY_STATUS_OPTIONS, 
-                                       max_length=1)
+                                 on_delete=models.SET_NULL,
+                                 null=True) 
+    
     enable_comments = models.BooleanField(_('enable comments'), default=False)
+    author          = models.ForeignKey(get_user_model(),
+                                        on_delete=models.SET_NULL,
+                                        null=True, editable=False)
     
-    author = models.ForeignKey(
-        get_user_model(),
-        on_delete=models.SET_NULL,
-        null=True, editable=False)
-    
-    creation_date = models.DateTimeField(auto_now_add=True, editable=False)
+    creation_date     = models.DateTimeField(auto_now_add=True, editable=False)
     last_edition_date = models.DateTimeField(auto_now=True, editable=False)
-    publication_date = models.DateTimeField(editable=False, null=True)
+    publication_date  = models.DateTimeField(editable=False, null=True)
     
     @property
     def get_preview(self):
@@ -63,16 +65,18 @@ class Post(models.Model):
         else:
             date=self.last_edition_date
             return reverse('admin:post_demo', kwargs={'day': date.day,
-                                                         'month': date.month,
-                                                         'year': date.year,
-                                                         'slug': self.slug,
-                                                         'demo': 1})
+                                                      'month': date.month,
+                                                      'year': date.year,
+                                                      'slug': self.slug,
+                                                      'demo': 1})
 
     class Meta:
-        verbose_name = _('post')
+        verbose_name        = _('post')
         verbose_name_plural = _('posts')
+        
         ordering = ('creation_date',)
         db_table = 'dapricot_blog_post'
+        
         unique_together = ['title', 'slug']
         
     def __str__(self):
@@ -81,7 +85,8 @@ class Post(models.Model):
 @receiver(post_save, sender=Post)
 def post_slug(sender, instance, created, **kwargs):
     title = slugify(instance.title)[0:40]
-    repeats = Post.objects.filter(slug=title).count()
+    repeats = Post.objects.filter(slug=title).exclude(id=instance.id)
+    repeats = repeats.count()
     if repeats > 0:
         title += "_%s" % repeats
         

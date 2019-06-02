@@ -7,7 +7,7 @@ from .models import User, Group
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('username','email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
@@ -17,11 +17,12 @@ class UserAdmin(auth_admin.UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
+            'fields': ('username','email', 'password1', 'password2'),
         }),
     )
-    ordering = ('email',)
-    list_display = ('email', 'first_name', 'last_name', 'is_staff')
+    ordering = ('username','email',)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display_links = ('username', 'email')
     readonly_fields = ('date_joined',)
 
 admin.site.unregister(auth_admin.Group)
