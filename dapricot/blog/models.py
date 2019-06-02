@@ -85,7 +85,8 @@ class Post(models.Model):
 @receiver(post_save, sender=Post)
 def post_slug(sender, instance, created, **kwargs):
     title = slugify(instance.title)[0:40]
-    repeats = Post.objects.filter(slug=title).count()
+    repeats = Post.objects.filter(slug=title).exclude(id=instance.id)
+    repeats = repeats.count()
     if repeats > 0:
         title += "_%s" % repeats
         
