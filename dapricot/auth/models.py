@@ -3,6 +3,7 @@ from django.core.mail              import send_mail
 from django.contrib.auth           import models as auth_models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation      import ugettext_lazy as _
+from django.conf                   import settings
 
 from .managers import UserManager
 
@@ -25,27 +26,29 @@ class PermissionsMixin(auth_models.PermissionsMixin):
     )
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
         db_table = 'dapricot_auth_permissionsmixin'
         
 class User(AbstractBaseUser, PermissionsMixin):
     email       = models.EmailField(_('email address'), unique=True)
+    username    = models.CharField(_('username'), max_length=30, unique=True)
     first_name  = models.CharField(_('first name'), max_length=30, blank=True)
     last_name   = models.CharField(_('last name'), max_length=30, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_active   = models.BooleanField(_('active'), default=True)
     is_staff    = models.BooleanField(_('is staff'), default=False)
-    avatar      = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    avatar      = models.ImageField(upload_to='dapricot/avatars/', 
+                                    null=True, 
+                                    blank=True)
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = settings.USERNAME_FIELD
+    if settings.USERNAME_FIELD=='email':
+        REQUIRED_FIELDS = ['username']
+    elif settings.USERNAME_FIELD=='username':
+        REQUIRED_FIELDS = ['email']
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
         db_table = 'dapricot_auth_user'
 
     def get_full_name(self):
