@@ -4,6 +4,9 @@ class SecretsCollection(models.Model):
     name = models.SlugField(max_length=50, unique=True)
     is_applied = models.BooleanField(default=False, editable=False)
     
+    def __str__(self):
+        return self.name
+    
     def counted_secrets(self):
         qs = self.get_secrets()
         
@@ -27,6 +30,9 @@ class Secret(models.Model):
     key_name = models.SlugField(max_length=50)
     value = models.CharField(max_length=100)
     collection = models.ForeignKey('SecretsCollection', on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.key_name
 
     class Meta:
         unique_together = (('key_name',  'collection'),)

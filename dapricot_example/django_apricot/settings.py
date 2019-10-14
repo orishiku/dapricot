@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'dapricot.blog',
     'dapricot.pages',
     'dapricot.media',
-    #'dapricot.webhooks',
+    'dapricot.integrations',
 ]
 
 MIDDLEWARE = [

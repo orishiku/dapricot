@@ -102,8 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-/Pipfile
 
 \.pydevproject
 
 *.sqlite3
+
+Pipfile.lock
+
+requeriments.txt
