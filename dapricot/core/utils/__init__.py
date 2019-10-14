@@ -18,6 +18,9 @@ class SecretsCollectionObject:
 
         return len(self.__secrets)
 
+    def get_secrets(self):
+        return self.__secrets
+    
     def get_secret_value(self, key_name):
         return self.__secrets.get(key_name, None)
 

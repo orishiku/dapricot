@@ -61,6 +61,16 @@ def apply_system_side(modeladmin, request, queryset):
 apply_system_side.short_description = "Apply secrets to be used system-side."
 
 def remove_system_side(modeladmin, request, queryset):
+    for collection in queryset:
+        c = SecretsCollectionObject(collection.name, settings.BASE_DIR)
+
+        for secret in collection.get_secrets():
+            c.add_or_change_secret_value(secret.key_name,
+                                         secret.value)
+        
+        c.save_secrets()
+
+        
     queryset.update(is_applied=False)
     
 remove_system_side.short_description = "Remove secrets to be used system-side."
@@ -73,3 +83,51 @@ class CollectionAdmin(SecretsHandlerModelAdmin):
     list_display = ('name', 'counted_secrets', 'status')
     inlines = [SecretInline,]
     actions = [apply_system_side, remove_system_side]
+    
+    def get_queryset(self, request):
+        qs = super(CollectionAdmin, self).get_queryset(request)
+        djs = False
+        dbs = False
+        
+        for collection in qs:
+            if collection.name == 'DJANGO_SECRETS':
+                djs = True
+            elif collection.name == 'DATABASE_SECRETS':
+                dbs = True
+        
+        if not djs:
+            c = SecretsCollectionObject('DJANGO_SECRETS', settings.BASE_DIR)
+            collection = SecretsCollection.objects.create(name='DJANGO_SECRETS')
+            secrets = c.get_secrets()
+            
+            for secret in c.get_secrets():
+
+                Secret.objects.create(key_name=secret,
+                                      value=secrets[secret],
+                                      collection=collection)
+
+            collection.is_applied=True
+            collection.save()
+            
+        if not dbs:
+            c = SecretsCollectionObject('DATABASE_SECRETS', settings.BASE_DIR)
+            collection = SecretsCollection.objects.create(name='DATABASE_SECRETS')
+            secrets = c.get_secrets()
+            
+            for secret in c.get_secrets():
+
+                Secret.objects.create(key_name=secret,
+                                      value=secrets[secret],
+                                      collection=collection)
+
+            collection.is_applied=True
+            collection.save()
+        
+        
+        return super(CollectionAdmin, self).get_queryset(request)
+            
+            
+            
+            
+            
+            
