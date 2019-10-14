@@ -105,3 +105,9 @@ venv.bak/
 /Pipfile
 
 \.pydevproject
+
+DATABASE_SECRETS
+
+DJANGO_SECRETS
+
+*.sqlite3

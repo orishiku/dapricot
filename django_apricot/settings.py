@@ -18,9 +18,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+from dapricot.core.utils import SecretsCollectionObject
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '4xif*6w@urzjybvr^ogdq20x3h@$kjzbj6v+!+l8%vb-3if$1^'
+
+DJANGO_SECRETS = SecretsCollectionObject('DJANGO_SECRETS', BASE_DIR)
+
+SECRET_KEY = DJANGO_SECRETS.get_secret_value('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,7 +49,7 @@ INSTALLED_APPS = [
     'dapricot.blog',
     'dapricot.pages',
     'dapricot.media',
-    'dapricot.webhooks',
+    #'dapricot.webhooks',
 ]
 
 MIDDLEWARE = [
@@ -81,11 +85,19 @@ WSGI_APPLICATION = 'django_apricot.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
+DATABASE_SECRETS = SecretsCollectionObject('DATABASE_SECRETS', BASE_DIR)
+DATABASE_ROUTERS = ['dapricot.core.routers.SecretsHandlerRouter',]
+MAIN_DATABASE = 'default'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': DATABASE_SECRETS.get_secret_value('ENGINE_DEFAULT'),
+        'NAME': os.path.join(BASE_DIR, 
+                             DATABASE_SECRETS.get_secret_value('NAME_DEFAULT')),
+    },
+    'secrets_db': {
+        'ENGINE': DATABASE_SECRETS.get_secret_value('ENGINE_SECRETS'),
+        'NAME': os.path.join(BASE_DIR, 
+                             DATABASE_SECRETS.get_secret_value('NAME_SECRETS')),
     }
 }
 
