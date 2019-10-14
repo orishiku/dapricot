@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name='dapricot',
     version='0.1',
-    packages=find_packages(exclude=["django_apricot"]),
+    packages=find_packages(exclude=["dapricot_example"]),
     include_package_data=True,
     license='BSD License',  # example license
     description='A simple Django app to conduct Web-based polls.',

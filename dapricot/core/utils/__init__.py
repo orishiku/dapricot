@@ -27,6 +27,9 @@ class SecretsCollectionObject:
     def add_or_change_secret_value(self, key_name, value):
         self.__secrets[key_name.strip()] = value.strip()
         return self.__secrets[key_name.strip()]
+    
+    def delete_secret(self, key_name):
+        self.__secrets[key_name.strip()]
 
     def save_secrets(self):        
         try:
