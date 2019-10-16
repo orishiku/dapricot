@@ -32,39 +32,39 @@ def sendMail(request, commenter):
 
 def post(request, day, month, year, slug, demo=0):
     if demo is 1:
-        post = Post.objects.filter(last_edition_date__year=year,
+        post = Post.objects.get(last_edition_date__year=year,
                     last_edition_date__month=month,
-                    last_edition_date__day=day)
+                    last_edition_date__day=day,
+                    slug=slug)
         
     else:
-        post = Post.objects.filter(publication_date__year=year,
+        post = Post.objects.get(publication_date__year=year,
                     publication_date__month=month,
-                    publication_date__day=day)
-        
-    for p in post:
-        comments = Comment.objects.filter(post=p)
-        if p.slug==slug:
-            if (p.author==request.user and p.status=='d') or p.status=='p':
+                    publication_date__day=day,
+                    slug=slug)
+
+    comments = Comment.objects.filter(post=post)
+    
+    if (post.author==request.user and post.status=='d') or post.status=='p':
+        if request.method == "POST":
+            form = CommentCommenterForm(request.POST)
+            
+            if form.is_valid():
+                commenter, created = form.get_or_create_comment_commenter(post)
                 
-                if request.method == "POST":
-                    form = CommentCommenterForm(request.POST)
-                    
-                    if form.is_valid():
-                        commenter, created = form.get_or_create_comment_commenter(p)
-                        
-                        if created:
-                            commenter.save()
-                            sendMail(request, commenter)
-                            form = CommentCommenterForm()
-                        
-                else:
+                if created:
+                    commenter.save()
+                    sendMail(request, commenter)
                     form = CommentCommenterForm()
-                    
-                return render(request, 'blog/post.html', {
-                    'post': p,
-                    'comments': comments,
-                    'form': form
-                    })
+                
+        else:
+            form = CommentCommenterForm()
+            
+        return render(request, 'dapricot/blog/post.html', {
+            'post': post,
+            'comments': comments,
+            'form': form
+            })
     
     raise Http404("Post does not exist")
 
@@ -72,52 +72,64 @@ def filterList(request, filter_name):
     
     if filter_name=='category':
         filter_list = Category.objects.all()
+
     elif filter_name=='tag':
         filter_list = Tag.objects.all()
-    
+
+    elif filter_name=='author':
+        #TODO
+        filter_list = None
+
     if filter_list and filter_list.count()>0:
-        return render(request, 'blog/filter_list.html', {
+        return render(request, 'dapricot/blog/filter_list.html', {
             'filter_list':filter_list,
             'filter_name': filter_name
         })
     
     raise Http404("Poll does not exist")
 
+def datePostList(request, year, month=None, day=None, page=1):
+    post_list = Post.objects.filter(
+        status='p', publication_date__year=year).order_by('-publication_date')
+    
+    if month:
+        post_list = post_list.filter(publication_date__month=month)
+
+    if day:
+        post_list = post_list.filter(publication_date__day=day)
+    
+    paginator = Paginator(post_list, 10)
+    list_page = paginator.get_page(page)
+
+    data = { 'post_list':list_page }
+    template = 'dapricot/blog/post_list.html'
+
+    return render(request, template, data)
+
 def postList(request, filter_name=None, value=None, page=1):
     post_list = Post.objects.filter(status='p').order_by('-publication_date')
     filter_value = None
+    
     if filter_name=='category':
-        categories = Category.objects.all()
-        for c in categories:
-            if c.slug==value:
-                filter_value = c
-        post_list = post_list.filter(category__name=filter_value.name)
+        filter_value = Category.objects.filter(slug=value).last()
+        post_list = post_list.filter(category=filter_value)
         
     elif filter_name=='tag':
-        tags = Tag.objects.all()
+        filter_value = Tag.objects.filter(slug=value).last()
+        post_list = post_list.filter(tags=filter_value)
         
-        for t in tags:
-            if t.slug==value:
-                filter_value = t
-        post_list = post_list.filter(tags__name=filter_value.name)
-    
     paginator = Paginator(post_list, 10)
     list_page = paginator.get_page(page)
     
     data = { 'post_list':list_page }
-    template = 'blog/main_site.html'
+    template = 'dapricot/blog/main_site.html'
     
     if filter_name:
         data.update({ 'filter': [filter_name, filter_value] })
-        template = 'blog/post_list.html'
+        template = 'dapricot/blog/post_list.html'
         
-    return render(request, template, {
-        'post_list':list_page,
-        'filter': [filter_name, filter_value]
-    })
+    return render(request, template, data)
     
-    raise Http404("Poll does not exist")
-
 def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))

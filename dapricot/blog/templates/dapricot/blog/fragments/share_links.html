@@ -1,4 +1,4 @@
-{% url 'oblog:post' day=post.publication_date.day month=post.publication_date.month year=post.publication_date.year slug=post.slug as p_url%}
+{% url 'dablog:post' day=post.publication_date.day month=post.publication_date.month year=post.publication_date.year slug=post.slug as p_url%}
 
 {% with p_permalink=request.scheme|add:"://"|add:request.get_host|add:p_url %}
 <h4>Compartir:</h4>

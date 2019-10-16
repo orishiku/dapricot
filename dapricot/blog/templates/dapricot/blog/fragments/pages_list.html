@@ -4,9 +4,9 @@
 	{% if p == post_list.number %}
 <span>{{p}}</span>
 	{% elif filter.0 %}
-<a href="{% url 'dapricot_blog:filter_posts' filter_name=filter.0 value=filter.1.slug page=p %}">{{p}}</a>
+<a href="{% url 'dablog:filter_posts' filter_name=filter.0 value=filter.1.slug page=p %}">{{p}}</a>
 	{% else %}
-<a href="{% url 'dapricot_blog:main_list' page=p %}">{{p}}</a>
+<a href="{% url 'dablog:main_list' page=p %}">{{p}}</a>
 	{% endif %}
 {% endfor%}
 	</section>

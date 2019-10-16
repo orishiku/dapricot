@@ -16,7 +16,7 @@
 		{% for filter in filter_list%}
 <article>
 	<section>
-	<h4><a href="{% url 'dapricot_blog:filter_posts' filter_name=filter_name value=filter.slug %}">{{ filter.name }}</a></h4>
+	<h4><a href="{% url 'dablog:filter_posts' filter_name=filter_name value=filter.slug %}">{{ filter.name }}</a></h4>
 	</section>
 </article>
 		{% endfor %}	

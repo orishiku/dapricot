@@ -9,10 +9,10 @@
 {% block main %}
 	{% if post_list.start_index > 0 %}
 		{% for post in post_list%}
-{% include "blog/fragments/post_preview.html" %}
+{% include "dapricot/blog/fragments/post_preview.html" %}
 
 		{% endfor %}
-{% include "blog/fragments/pages_list.html" %}
+{% include "dapricot/blog/fragments/pages_list.html" %}
 
 	{% else %}
 	<article>

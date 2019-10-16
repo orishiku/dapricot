@@ -68,7 +68,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(os.path.dirname(BASE_DIR), 'dapricot', 'core', 'templates'),],
+            os.path.join(os.path.dirname(BASE_DIR), 'dapricot', 'core', 'templates'),
+            os.path.join(os.path.dirname(BASE_DIR), 'dapricot', 'pages', 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -94,8 +94,6 @@ def post_slug(sender, instance, created, **kwargs):
     if created:
         instance.save()
 
-'''
-'''
 class Category(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50, blank=True)

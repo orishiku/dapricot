@@ -9,9 +9,14 @@
 	{% if post.status == 'd' %}(BORRADOR){% endif %}
 	{{ post.title }}
 	</h1><br />
-	<h5>{{ post.publication_date }}</h5>	
+	<h5>{% if post.status == 'd' %}
+		{{ post.publication_date }}
+		{% else %}
+		{{ post.last_edition_date }}
+		{% endif %}
+	</h5>	
 {% endblock %}
 
 {% block main %}
-{% include "blog/fragments/post_full.html" %}
+{% include "dapricot/blog/fragments/post_full.html" %}
 {% endblock %}
