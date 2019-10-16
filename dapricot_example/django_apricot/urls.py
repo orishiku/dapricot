@@ -21,6 +21,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('dapricot.blog.urls'))
 ]
 
 if settings.DEBUG:
@@ -30,4 +31,4 @@ if settings.DEBUG:
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [
-    path('', include('django.contrib.flatpages.urls')),]
+    path('', include('dapricot.pages.urls')),]
