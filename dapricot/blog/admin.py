@@ -5,6 +5,14 @@ from django.urls import path
 from .models import Post, Category, Tag, Comment, Commenter
 from . import views
 
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'author','status', 'last_edition_date']
@@ -40,17 +48,10 @@ class PostAdmin(admin.ModelAdmin):
         else:
             return qs.filter(author=request.user)
     
-@admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
-    list_display = ['name']
-    
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name']
-    
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['author', 'post', 'status']
+    readonly_fields = ['author', 'content']
     
 @admin.register(Commenter)
 class CommenterAdmin(admin.ModelAdmin):

@@ -63,11 +63,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_apricot.urls'
-
+print()
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(os.path.dirname(BASE_DIR), 'dapricot', 'core', 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
