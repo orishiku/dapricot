@@ -2,4 +2,5 @@ include LICENSE
 include README.rst
 #recursive-include dapricot/blog/static *
 recursive-include dapricot/blog/templates *
+recursive-include dapricot/core/templates *
 #recursive-include docs *
