@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 
-from .models import Comment, Commenter
+from dapricot.blog.models import Comment, Commenter
 
 class CommentForm(ModelForm):
     

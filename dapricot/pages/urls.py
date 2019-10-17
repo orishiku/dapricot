@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from . import views
+from dapricot.pages import views
 
 urlpatterns = [
     path('<path:url>', views.page),

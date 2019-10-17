@@ -18,10 +18,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
+from dapricot.pages import views
 
 urlpatterns = [
+    path('', views.page, {'url': '/home/'}, name='home'),
     path('admin/', admin.site.urls),
-    path('', include('dapricot.blog.urls'))
+    path('blog/', include('dapricot.blog.urls'))
 ]
 
 if settings.DEBUG:

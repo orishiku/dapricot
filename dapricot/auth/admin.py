@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth import admin as auth_admin
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from .models import User, Group
+from dapricot.auth.models import User, Group
 
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):

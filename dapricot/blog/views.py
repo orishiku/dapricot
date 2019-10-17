@@ -1,17 +1,15 @@
 from django.http import Http404
 from django.shortcuts import render
-from django.core.paginator import Paginator
 from django.conf import settings
-
-from .models import Post, Category, Tag, Comment, Commenter
-from .forms import CommentCommenterForm
-
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
+
 from dapricot.blog.tokens import account_activation_token
+from dapricot.blog.models import Post, Category, Tag, Comment, Commenter
+from dapricot.blog.forms import CommentCommenterForm
 
 def sendMail(request, commenter):
     subject = 'Verificar correo'
@@ -25,7 +23,9 @@ def sendMail(request, commenter):
                 })
     
     if settings.EMAIL_HOST_USER:
-        send_mail(subject, message, settings.EMAIL_HOST_USER, [commenter.email])
+        send_mail(subject, message,
+                  settings.EMAIL_HOST_USER,
+                  [commenter.email])
         
     else:
         send_mail(subject, message, None, [commenter.email])
@@ -69,7 +69,7 @@ def post(request, day, month, year, slug, demo=0):
     raise Http404("Post does not exist")
 
 def filterList(request, filter_name):
-    
+    filter_list = None
     if filter_name=='category':
         filter_list = Category.objects.all()
 
@@ -89,45 +89,28 @@ def filterList(request, filter_name):
     raise Http404("Poll does not exist")
 
 def datePostList(request, year, month=None, day=None, page=1):
-    post_list = Post.objects.filter(
-        status='p', publication_date__year=year).order_by('-publication_date')
-    
-    if month:
-        post_list = post_list.filter(publication_date__month=month)
 
-    if day:
-        post_list = post_list.filter(publication_date__day=day)
-    
-    paginator = Paginator(post_list, 10)
-    list_page = paginator.get_page(page)
+    data = {'date': [year, month, day, page]}
 
-    data = { 'post_list':list_page }
     template = 'dapricot/blog/post_list.html'
 
     return render(request, template, data)
 
 def postList(request, filter_name=None, value=None, page=1):
-    post_list = Post.objects.filter(status='p').order_by('-publication_date')
-    filter_value = None
-    
-    if filter_name=='category':
-        filter_value = Category.objects.filter(slug=value).last()
-        post_list = post_list.filter(category=filter_value)
-        
-    elif filter_name=='tag':
-        filter_value = Tag.objects.filter(slug=value).last()
-        post_list = post_list.filter(tags=filter_value)
-        
-    paginator = Paginator(post_list, 10)
-    list_page = paginator.get_page(page)
-    
-    data = { 'post_list':list_page }
     template = 'dapricot/blog/main_site.html'
-    
+    filter_value = None
+        
     if filter_name:
-        data.update({ 'filter': [filter_name, filter_value] })
         template = 'dapricot/blog/post_list.html'
         
+        if filter_name=='category':
+            filter_value = Category.objects.filter(slug=value).last()
+    
+        elif filter_name=='tag':
+            filter_value = Tag.objects.filter(slug=value).last()
+        
+    data = {'filter': [filter_name, filter_value]}
+
     return render(request, template, data)
     
 def activate(request, uidb64, token):
@@ -137,7 +120,8 @@ def activate(request, uidb64, token):
     except (TypeError, ValueError, OverflowError, Commenter.DoesNotExist):
         commenter = None
 
-    if commenter is not None and account_activation_token.check_token(commenter, token):
+    if (commenter is not None and
+        account_activation_token.check_token(commenter, token)):
         commenter.status = 'v'
         commenter.save()
         Comment.objects.filter(author=commenter).update(status='a')

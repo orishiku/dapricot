@@ -7,18 +7,18 @@
 {% block container-header %}{% endblock %}
 
 {% block main %}
-	{% if post_list.start_index > 0 %}
-		{% for post in post_list%}
-{% include "dapricot/blog/fragments/post_preview.html" %}
-
+	{% load dablog_tags %}
+	{% filter_posts_list as posts %}
+	{% if posts.start_index > 0 %}
+		{% for post in posts %}
+			{% include "dapricot/blog/fragments/post_preview.html" %}
 		{% endfor %}
-{% include "dapricot/blog/fragments/pages_list.html" %}
-
+		{% include "dapricot/blog/fragments/pages_list.html" %}
 	{% else %}
-	<article>
-		<section>
-		<h4>No posts yet</h4>
-		</section>
-	</article>
+		<article>
+			<section>
+				<h4>No posts yet</h4>
+			</section>
+		</article>
 	{% endif %}
 {% endblock %}

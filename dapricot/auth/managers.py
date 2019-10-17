@@ -1,5 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
-from django.conf import settings
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 

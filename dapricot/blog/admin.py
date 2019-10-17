@@ -2,8 +2,8 @@ from django.utils import timezone
 from django.contrib import admin
 from django.urls import path
 
-from .models import Post, Category, Tag, Comment, Commenter
-from . import views
+from dapricot.blog.models import Post, Category, Tag, Comment, Commenter
+from dapricot.blog import views
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):

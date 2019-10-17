@@ -7,22 +7,36 @@
 {% block main %}
 
 <article class="title">
-	<h1>{{ filter.1.name }}</h1>
-	<h4>{% trans filter.0|title %}</h4>
-	<h1>{{ filter_name }}</h1>
+	{% if filter %}
+		<h1>{{ filter.1 }}</h1>
+		<h4>{{ filter.0 }}</h4>
+	{% elif date %}
+		<h1>
+			{% if date.2 != None %}{{ date.2 }} /{% endif %}
+			{% if date.1 != None %}{{ date.1 }} /{% endif %}
+			{% if date.0 != None %}{{ date.0 }}{% endif %}
+		</h1>
+		<h4>Date</h4>
+	{% endif %}
 	<h4>{{ post.publication_date.date }}</h4>
 </article>
-	{% if post_list.start_index > 0 %}
-		{% for post in post_list%}
-{% include "dapricot/blog/fragments/post_preview.html" %}
+	{% load dablog_tags %}
+	{% if filter %}
+		{% filter_posts_list filter.0 filter.1 as posts %}
+	{% elif date %}
+		{% date_posts_list date.0 date.1 date.2 as posts %}
+	{% endif %}
+	
+	{% if posts.start_index > 0 %}
+		{% for post in posts%}
+			{% include "dapricot/blog/fragments/post_preview.html" %}
 		{% endfor %}
-{% include "dapricot/blog/fragments/pages_list.html" %}
-
+		{% include "dapricot/blog/fragments/pages_list.html" %}
 	{% else %}
-	<article>
-		<section>
-		<h4>{% trans 'No posts yet' %}</h4>
-		</section>
-	</article>
+		<article>
+			<section>
+				<h4>No posts yet</h4>
+			</section>
+		</article>
 	{% endif %}
 {% endblock %}

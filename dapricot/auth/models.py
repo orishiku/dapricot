@@ -1,11 +1,11 @@
-from django.db                     import models
-from django.core.mail              import send_mail
-from django.contrib.auth           import models as auth_models
+from django.db import models
+from django.core.mail import send_mail
+from django.contrib.auth import models as auth_models
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.utils.translation      import ugettext_lazy as _
-from django.conf                   import settings
+from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
-from .managers import UserManager
+from dapricot.auth.managers import UserManager
 
 class Group(auth_models.Group):
 

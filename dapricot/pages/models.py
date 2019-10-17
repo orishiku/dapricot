@@ -1,5 +1,5 @@
-from django.contrib.flatpages.models import FlatPage
 from django.db import models
+from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import gettext_lazy as _
 
 class Page(FlatPage):

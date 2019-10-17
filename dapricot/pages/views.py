@@ -4,7 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
 
-from .models import Page
+from dapricot.pages.models import Page
 
 views.DEFAULT_TEMPLATE = 'dapricot/pages/default.html'
 
