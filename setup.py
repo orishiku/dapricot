@@ -9,9 +9,10 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='dapricot',
-    version='0.1',
+    version='0.2',
     packages=find_packages(exclude=["dapricot_example"]),
     include_package_data=True,
+    install_requires=['django'],
     license='BSD License',
     description='A Django app collection for dynamic sites.',
     long_description=README,

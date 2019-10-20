@@ -4,7 +4,7 @@ class SimpleDapricotBlogConfig(AppConfig):
     """Simple AppConfig which does not do automatic discovery."""
 
     name = 'dapricot.blog'
-    label = 'dablog' #TODO:migration
+    label = 'dablog'
     verbose_name = "Django Apricot Blog Module"
 
 class DapricotBlogConfig(SimpleDapricotBlogConfig):
