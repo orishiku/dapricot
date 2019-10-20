@@ -1,0 +1,45 @@
+/* DASHBOARD */
+.dashboard .module table caption {
+  border-radius: 5px 5px 0px 0px; }
+
+.dashboard .module table th {
+  width: 100%;
+  border: None;
+  background: None; }
+
+.dashboard .module table td {
+  white-space: nowrap;
+  border: None;
+  padding: 10px 5px 10px 0px;
+  background: None; }
+  .dashboard .module table td a {
+    background-color: #EEEEEE;
+    color: #212121;
+    border-radius: .3em;
+    padding: 0.625em 1.25em;
+    margin: 0 0 0.625em;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 -0.25em 0 rgba(0, 0, 0, 0.25), 0 0.25em 0.25em rgba(0, 0, 0, 0.05); }
+    .dashboard .module table td a:hover {
+      background-color: #e6e6e6;
+      text-decoration: none; }
+    .dashboard .module table td a:active {
+      background: #dfdfdf;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.1), inset 0 0.25em 0.5em rgba(0, 0, 0, 0.05); }
+    .dashboard .module table td a.disabled {
+      background-color: #f4f4f4;
+      color: #c8c8c8;
+      cursor: default;
+      box-shadow: none; }
+    .dashboard .module table td a:active, .dashboard .module table td a:focus {
+      outline: none; }
+
+/* RECENT ACTIONS MODULE */
+.module ul.actionlist {
+  margin-left: 0; }
+  .module ul.actionlist li {
+    list-style-type: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis; }
+
+/*# sourceMappingURL=dashboard.min.css.map */

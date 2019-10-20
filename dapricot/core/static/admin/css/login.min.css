@@ -1,0 +1,63 @@
+/* LOGIN FORM */
+body.login #header {
+  height: auto;
+  padding: 15px 16px;
+  justify-content: center;
+  border-radius: 5px 5px 0px 0px; }
+  body.login #header h1 {
+    font-size: 18px; }
+    body.login #header h1 a {
+      color: #fff; }
+
+body.login #content {
+  padding: 20px 20px 0; }
+
+body.login #container {
+  background: #FFF;
+  color: #212121;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+  overflow: hidden;
+  width: 28em;
+  min-width: 300px;
+  margin: 100px auto; }
+  body.login #container:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); }
+
+body.login #content-main {
+  width: 100%; }
+
+body.login .form-row {
+  padding: 4px 0;
+  float: left;
+  width: 100%;
+  border-bottom: none; }
+  body.login .form-row label {
+    padding-right: 0.5em;
+    line-height: 2em;
+    font-size: 1em;
+    clear: both;
+    color: #333; }
+  body.login .form-row #id_username, body.login .form-row #id_password {
+    clear: both;
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box; }
+
+body.login span.help {
+  font-size: 10px;
+  display: block; }
+
+body.login .submit-row {
+  clear: both;
+  padding: 1em 0 0 9.4em;
+  margin: 0;
+  border: none;
+  background: none;
+  text-align: left; }
+
+body.login .password-reset-link {
+  text-align: center; }
+
+/*# sourceMappingURL=login.min.css.map */
