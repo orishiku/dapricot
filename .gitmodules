@@ -1,0 +1,3 @@
+[submodule "dapricot/store"]
+	path = dapricot/store
+	url = https://github.com/softapr/django_apricot_store.git
